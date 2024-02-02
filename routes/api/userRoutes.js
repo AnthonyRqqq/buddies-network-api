@@ -109,7 +109,7 @@ router
     });
 
 router
-    // The /api/user/:userId/friends/:friendId route
+    // The /api/users/:userId/friends/:friendId route
     // For adding a new friend to a user's friend list
     .post('/:userId/friends/:friendId', async (req, res) => {
         try {
