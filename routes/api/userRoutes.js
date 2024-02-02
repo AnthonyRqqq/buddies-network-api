@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { User } = require('../../models/User')
+const User = require('../../models/User');
+const { ObjectId } = require('mongoose').Types;
 
 // The /api/users route
 // GET route for all users
@@ -19,7 +20,8 @@ router
     // POST route for creating a new user
     .post('/', async (req, res) => {
         try {
-            const data = await User.create(req.body);
+            const newUser = new User(req.body);
+            const data = await newUser.save();
 
             res.json(data);
 
@@ -34,7 +36,7 @@ router
 router
     .get('/:_id', async (req, res) => {
         try {
-            const data = await User.findOne({ _id: req.params._id })
+            const data = await User.findOne({ _id: new ObjectId(req.params._id) })
                 .populate([
                     'thoughts', 'friends'
                 ]);
@@ -58,7 +60,7 @@ router
         try {
             const data = await User.findOneAndUpdate(
                 {
-                    _id: req.params._id
+                    _id: new ObjectId(req.params._id)
                 },
                 {
                     $set: req.body
@@ -88,7 +90,7 @@ router
         try {
             const data = await User.findOneAndDelete(
                 {
-                    _id: req.params._id
+                    _id: new ObjectId(req.params._id)
                 }
             );
 
@@ -113,11 +115,11 @@ router
         try {
             const data = await User.findOneAndUpdate(
                 {
-                    _id: req.params.userId
+                    _id: new ObjectId(req.params.userId)
                 },
                 {
                     $addToSet: {
-                        friends: req.params.friendId
+                        friends: new ObjectId(req.params.friendId)
                     }
                 },
                 {
@@ -145,11 +147,11 @@ router
         try {
             const data = await User.findOneAndUpdate(
                 {
-                    _id: req.params.userId
+                    _id: new ObjectId(req.params.userId)
                 },
                 {
                     $pull: {
-                        friends: req.params.friendId
+                        friends: new ObjectId(req.params.friendId)
                     }
                 },
                 {
