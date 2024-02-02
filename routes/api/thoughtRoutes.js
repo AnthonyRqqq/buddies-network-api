@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { Thought } = require('../../models/Thought');
+const Thought = require('../../models/Thought');
+const { ObjectId } = require('mongoose').Types;
 
 // The /api/thoughts route
 // GET route for all thoughts
@@ -19,7 +20,8 @@ router
     // POST route for creating a new thought
     .post('/', async (req, res) => {
         try {
-            const data = await Thought.create(req.body);
+            const newThought = new Thought(req.body);
+            const data = await newThought.save();
 
             if (!data) {
                 return res.status(404).json({
@@ -41,7 +43,7 @@ router
     .get('/:_id', async (req, res) => {
         try {
             const data = await Thought.findOne({
-                _id: req.params._id
+                _id: new ObjectId(req.params._id)
             });
 
             if (!data) {
@@ -63,7 +65,7 @@ router
         try {
             const data = await Thought.findOneAndUpdate(
                 {
-                    _id: req.params._id
+                    _id: new ObjectId(req.params._id)
                 },
                 {
                     $set: req.body
@@ -93,7 +95,7 @@ router
     .delete('/:_id', async (req, res) => {
         try {
             const data = await Thought.findOneAndDelete({
-                _id: req.params._id
+                _id: new ObjectId(req.params._id)
             });
 
             if (!data) {
@@ -115,7 +117,7 @@ router.post('/:thoughtId/reactions', async (req, res) => {
     try {
         const data = await Thought.findOneAndUpdata(
             {
-                _id: req.params.thoughtId
+                _id: new ObjectId(req.params.thoughtId)
             },
             {
                 $addToSet: {
@@ -147,12 +149,12 @@ router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
     try {
         const data = await Thought.findOneAndUpdate(
             {
-                _id: req.params.thoughtId
+                _id: new ObjectId(req.params.thoughtId)
             },
             {
                 $pull: {
                     reactions: {
-                        reactionId: req.params.reactionId
+                        reactionId: new ObjectId(req.params.reactionId)
                     }
                 }
             },
