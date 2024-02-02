@@ -82,11 +82,64 @@ route.delete('/:_id', async (req, res) => {
         );
 
         res.json('Delete successful');
-        
+
     } catch (err) {
         console.error(err);
         res.status(500).json(err);
     };
 });
+
+route
+// The /api/user/:userId/friends/:friendId route
+// For adding a new friend to a user's friend list
+.post('/:userId/friends/:friendId', async (req, res) => {
+    try {
+        const data = await User.findOneAndUpdate(
+            {
+                _id: req.params.userId
+            },
+            {
+                $addToSet: {
+                    friends: req.params.friendId
+                }
+            },
+            {
+                runValidators: true,
+                new: true
+            }
+        );
+
+        res.json(data);
+
+    } catch (err) {
+        console.error(err);
+        res.json(err);
+    };
+})
+// For removing a friend from a user's friend list
+.delete('/:userId/friends/:friendId', async (req, res) => {
+    try {
+        const data = await User.findOneAndUpdate(
+            {
+                _id: req.params.userId
+            },
+            {
+                $pull: {
+                    friends: req.params.friendId
+                }
+            },
+            {
+                runValidators: true,
+                new: true
+            }
+        );
+
+        res.json(data);
+
+    } catch (err) {
+        console.error(err);
+        res.json(err);
+    };
+})
 
 module.exports = router;
