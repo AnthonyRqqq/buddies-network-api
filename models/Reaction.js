@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const reactionSchema = {
+const reactionSchema = new Schema({
     reactionId: {
         default: new ObjectId,
     },
@@ -18,4 +18,8 @@ const reactionSchema = {
         default: Date.now,
         get: formatTimestamp,
     },
-}
+});
+
+const Reaction = model('reaction', reactionSchema);
+
+module.exports = Reaction;
