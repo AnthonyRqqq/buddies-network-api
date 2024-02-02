@@ -8,7 +8,7 @@ const userSchema = new Schema({
         trim: true,
     },
     email: {
-        tpye: String,
+        type: String,
         required: true,
         unique: true,
     },

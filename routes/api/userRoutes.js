@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../../models')
+const { User } = require('../../models/User')
 
 // The /api/users route
 // GET route for all users
