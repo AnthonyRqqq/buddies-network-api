@@ -4,172 +4,172 @@ const { User } = require('../../models')
 // The /api/users route
 // GET route for all users
 router
-.get('/', async (req, res) => {
-    try {
-        const data = await User.find();
+    .get('/', async (req, res) => {
+        try {
+            const data = await User.find();
 
-        res.json(data);
+            res.json(data);
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
-    };
-})
+        } catch (err) {
+            console.error(err);
+            res.status(500).json(err);
+        };
+    })
 
-// POST route for creating a new user
-.post('/', async (req, res) => {
-    try {
-        const data = await User.create(req.body);
+    // POST route for creating a new user
+    .post('/', async (req, res) => {
+        try {
+            const data = await User.create(req.body);
 
-        res.json(data);
+            res.json(data);
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
-    };
-});
+        } catch (err) {
+            console.error(err);
+            res.status(500).json(err);
+        };
+    });
 
 // The /api/users/:_id route
 // GET route for getting a single user by its _id
 router
-.get('/:_id', async (req, res) => {
-    try {
-        const data = await User.findOne({ _id: req.params._id })
-        .populate([
-            'thoughts', 'friends'
-        ]);
+    .get('/:_id', async (req, res) => {
+        try {
+            const data = await User.findOne({ _id: req.params._id })
+                .populate([
+                    'thoughts', 'friends'
+                ]);
 
-        if (!data) {
-            return res.status(404).json({
-                message: 'No user found'
-            });
+            if (!data) {
+                return res.status(404).json({
+                    message: 'No user found'
+                });
+            };
+
+            res.json(data);
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).json(err);
         };
+    })
 
-        res.json(data);
+    // PUT route for updating a user by its _id
+    .put('/:_id', async (req, res) => {
+        try {
+            const data = await User.findOneAndUpdate(
+                {
+                    _id: req.params._id
+                },
+                {
+                    $set: req.body
+                },
+                {
+                    runValidators: true,
+                    new: true
+                }
+            );
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
-    };
-})
+            if (!data) {
+                return res.status(404).json({
+                    message: 'No user found'
+                });
+            };
 
-// PUT route for updating a user by its _id
-.put('/:_id', async (req, res) => {
-    try {
-        const data = await User.findOneAndUpdate(
-            {
-                _id: req.params._id
-            },
-            {
-                $set: req.body
-            },
-            {
-                runValidators: true,
-                new: true
-            }
-        );
+            res.json(data);
 
-        if (!data) {
-            return res.status(404).json({
-                message: 'No user found'
-            });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json(err);
         };
+    })
 
-        res.json(data);
+    // DELETE route for deleting a user by its _id
+    .delete('/:_id', async (req, res) => {
+        try {
+            const data = await User.findOneAndDelete(
+                {
+                    _id: req.params._id
+                }
+            );
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
-    };
-})
+            if (!data) {
+                return res.status(404).json({
+                    message: 'No user found'
+                });
+            };
 
-// DELETE route for deleting a user by its _id
-.delete('/:_id', async (req, res) => {
-    try {
-        const data = await User.findOneAndDelete(
-            {
-                _id: req.params._id
-            }
-        );
+            res.json('Delete successful');
 
-        if (!data) {
-            return res.status(404).json({
-                message: 'No user found'
-            });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json(err);
         };
-
-        res.json('Delete successful');
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
-    };
-});
+    });
 
 router
-// The /api/user/:userId/friends/:friendId route
-// For adding a new friend to a user's friend list
-.post('/:userId/friends/:friendId', async (req, res) => {
-    try {
-        const data = await User.findOneAndUpdate(
-            {
-                _id: req.params.userId
-            },
-            {
-                $addToSet: {
-                    friends: req.params.friendId
+    // The /api/user/:userId/friends/:friendId route
+    // For adding a new friend to a user's friend list
+    .post('/:userId/friends/:friendId', async (req, res) => {
+        try {
+            const data = await User.findOneAndUpdate(
+                {
+                    _id: req.params.userId
+                },
+                {
+                    $addToSet: {
+                        friends: req.params.friendId
+                    }
+                },
+                {
+                    runValidators: true,
+                    new: true
                 }
-            },
-            {
-                runValidators: true,
-                new: true
-            }
-        );
+            );
 
-        if (!data) {
-            return res.status(404).json({
-                message: 'No user found'
-            });
+            if (!data) {
+                return res.status(404).json({
+                    message: 'No user found'
+                });
+            };
+
+            res.json(data);
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).json(err);
         };
+    })
 
-        res.json(data);
-
-    } catch (err) {
-        console.error(err);
-        res.json(err);
-    };
-})
-
-// For removing a friend from a user's friend list
-.delete('/:userId/friends/:friendId', async (req, res) => {
-    try {
-        const data = await User.findOneAndUpdate(
-            {
-                _id: req.params.userId
-            },
-            {
-                $pull: {
-                    friends: req.params.friendId
+    // For removing a friend from a user's friend list
+    .delete('/:userId/friends/:friendId', async (req, res) => {
+        try {
+            const data = await User.findOneAndUpdate(
+                {
+                    _id: req.params.userId
+                },
+                {
+                    $pull: {
+                        friends: req.params.friendId
+                    }
+                },
+                {
+                    runValidators: true,
+                    new: true
                 }
-            },
-            {
-                runValidators: true,
-                new: true
-            }
-        );
+            );
 
-        if (!data) {
-            return res.status(404).json({
-                message: 'No user found'
-            });
+            if (!data) {
+                return res.status(404).json({
+                    message: 'No user found'
+                });
+            };
+
+            res.json(data);
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).json(err);
         };
-
-        res.json(data);
-
-    } catch (err) {
-        console.error(err);
-        res.json(err);
-    };
-});
+    });
 
 module.exports = router;
