@@ -12,9 +12,26 @@ const userSchema = new Schema({
         required: true,
         unique: true,
     },
-    thoughts: [thoughtSchema],
-    friends: [friendSchema]
-});
+    thoughts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'thought'
+        },
+    ],
+    friends: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user'
+        },
+    ],
+},
+    {
+        toJson: {
+            virtuals: true,
+        },
+        id: false,
+    }
+);
 
 const User = model('user', userSchema);
 
