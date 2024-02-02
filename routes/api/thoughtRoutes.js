@@ -115,7 +115,7 @@ router
 
 router.post('/:thoughtId/reactions', async (req, res) => {
     try {
-        const data = await Thought.findOneAndUpdata(
+        const data = await Thought.findOneAndUpdate(
             {
                 _id: new ObjectId(req.params.thoughtId)
             },
