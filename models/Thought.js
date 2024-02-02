@@ -17,7 +17,14 @@ const thoughtSchema = new Schema({
         required: true,
     },
     reactions: [reactionSchema],
-});
+},
+    {
+        toJson: {
+            virtuals: true,
+        },
+        id: false
+    }
+);
 
 const reactionSchema = new Schema({
     reactionId: {
@@ -37,6 +44,10 @@ const reactionSchema = new Schema({
         default: Date.now,
         get: formatTimestamp,
     },
+});
+
+thoughtSchema.virtual('reactionCount').get(function () {
+    return this.reactions.length;
 });
 
 const Thought = model('thought', thoughtSchema);
