@@ -3,7 +3,8 @@ const { User } = require('../../models')
 
 // The /api/users route
 // GET route for all users
-router.get('/', async (req, res) => {
+router
+.get('/', async (req, res) => {
     try {
         const data = await User.find();
 
@@ -13,28 +14,10 @@ router.get('/', async (req, res) => {
         console.error(err);
         res.status(500).json(err);
     };
-});
+})
 
-// The /api/users/:_id route
-// GET route for getting a single user by its _id
-router.get('/:_id', async (req, res) => {
-    try {
-        const data = await User.findOne({ _id: req.params._id })
-        .populate([
-            'thoughts', 'friends'
-        ]);
-
-        res.json(data);
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
-    };
-});
-
-// The /api/users route
 // POST route for creating a new user
-router.post('/', async (req, res) => {
+.post('/', async (req, res) => {
     try {
         const data = await User.create(req.body);
 
@@ -47,8 +30,31 @@ router.post('/', async (req, res) => {
 });
 
 // The /api/users/:_id route
+// GET route for getting a single user by its _id
+router
+.get('/:_id', async (req, res) => {
+    try {
+        const data = await User.findOne({ _id: req.params._id })
+        .populate([
+            'thoughts', 'friends'
+        ]);
+
+        if (!data) {
+            return res.status(404).json({
+                message: 'No user found'
+            });
+        };
+
+        res.json(data);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json(err);
+    };
+})
+
 // PUT route for updating a user by its _id
-router.put('/:_id', async (req, res) => {
+.put('/:_id', async (req, res) => {
     try {
         const data = await User.findOneAndUpdate(
             {
@@ -63,23 +69,34 @@ router.put('/:_id', async (req, res) => {
             }
         );
 
+        if (!data) {
+            return res.status(404).json({
+                message: 'No user found'
+            });
+        };
+
         res.json(data);
 
     } catch (err) {
         console.error(err);
         res.status(500).json(err);
     };
-});
+})
 
-// The /api/users/:_id route
 // DELETE route for deleting a user by its _id
-route.delete('/:_id', async (req, res) => {
+.delete('/:_id', async (req, res) => {
     try {
         const data = await User.findOneAndDelete(
             {
                 _id: req.params._id
             }
         );
+
+        if (!data) {
+            return res.status(404).json({
+                message: 'No user found'
+            });
+        };
 
         res.json('Delete successful');
 
@@ -89,7 +106,7 @@ route.delete('/:_id', async (req, res) => {
     };
 });
 
-route
+router
 // The /api/user/:userId/friends/:friendId route
 // For adding a new friend to a user's friend list
 .post('/:userId/friends/:friendId', async (req, res) => {
@@ -109,6 +126,12 @@ route
             }
         );
 
+        if (!data) {
+            return res.status(404).json({
+                message: 'No user found'
+            });
+        };
+
         res.json(data);
 
     } catch (err) {
@@ -116,6 +139,7 @@ route
         res.json(err);
     };
 })
+
 // For removing a friend from a user's friend list
 .delete('/:userId/friends/:friendId', async (req, res) => {
     try {
@@ -134,12 +158,18 @@ route
             }
         );
 
+        if (!data) {
+            return res.status(404).json({
+                message: 'No user found'
+            });
+        };
+
         res.json(data);
 
     } catch (err) {
         console.error(err);
         res.json(err);
     };
-})
+});
 
 module.exports = router;
