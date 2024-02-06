@@ -20,12 +20,14 @@ const reactionSchema = new Schema({
     },
 });
 
+// Options for setting the formattedDate on line 31
 const options = {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit'
 };
 
+// Virtual for formatting the given date from the createdAt field
 reactionSchema.virtual('formattedDate').get(function () {
     return this.createdAt.toLocaleDateString('en-US', options);
 });
