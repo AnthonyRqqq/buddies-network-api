@@ -9,6 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(routes);
 
+// Starts server
 db.once('open', () => {
     app.listen(PORT, () => {
         console.log(`Running on http://localhost:${PORT}`);
