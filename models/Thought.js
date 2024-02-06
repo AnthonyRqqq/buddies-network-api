@@ -11,7 +11,6 @@ const thoughtSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        // get: formatTimestamp,
     },
     username: {
         type: String,
@@ -20,7 +19,7 @@ const thoughtSchema = new Schema({
     reactions: [reactionSchema],
 },
     {
-        toJson: {
+        toJSON: {
             virtuals: true,
         },
         id: false
@@ -29,6 +28,16 @@ const thoughtSchema = new Schema({
 
 thoughtSchema.virtual('reactionCount').get(function () {
     return this.reactions.length;
+});
+
+const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+};
+
+thoughtSchema.virtual('formattedDate').get(function () {
+    return this.createdAt.toLocaleDateString('en-US', options);
 });
 
 const Thought = model('thought', thoughtSchema);

@@ -17,8 +17,17 @@ const reactionSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        // get: formatTimestamp,
     },
+});
+
+const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+};
+
+reactionSchema.virtual('formattedDate').get(function () {
+    return this.createdAt.toLocaleDateString('en-US', options);
 });
 
 module.exports = reactionSchema;

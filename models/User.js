@@ -11,6 +11,9 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true,
+        // Uses RegEx to check for valid email, returns error message if false
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email address']
+
     },
     thoughts: [
         {
@@ -26,7 +29,7 @@ const userSchema = new Schema({
     ],
 },
     {
-        toJson: {
+        toJSON: {
             virtuals: true,
         },
         id: false,
