@@ -1,3 +1,4 @@
+// Data for seeding user models
 const userData = [
     {
         username: 'Bob',
@@ -13,6 +14,7 @@ const userData = [
     }
 ];
 
+// Data for seeding thought models
 const thoughtData = [
     {
         thoughtText: 'test thought 1',

@@ -2,6 +2,7 @@ const connection = require('../config/connection');
 const { Thought, User } = require('../models');
 const { userData, thoughtData } = require('./data')
 
+// Error catch
 connection.on('error', (err) => err);
 
 connection.once('open', async () => {
