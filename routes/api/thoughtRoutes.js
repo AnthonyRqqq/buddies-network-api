@@ -113,6 +113,8 @@ router
         };
     });
 
+// The /api/thoughts/:thoughtId/reactions route
+// POST route for adding new reactions to thoughts by _id
 router.post('/:thoughtId/reactions', async (req, res) => {
     try {
         const data = await Thought.findOneAndUpdate(
@@ -145,6 +147,8 @@ router.post('/:thoughtId/reactions', async (req, res) => {
     }
 })
 
+// The /api/thoughts/:thoughtId/reactions/:reactionsId route
+// Used for deleting a reaction by _id on a thought that has been selected by _id
 router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
     try {
         const data = await Thought.findOneAndUpdate(
