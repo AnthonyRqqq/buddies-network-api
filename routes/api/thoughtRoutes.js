@@ -158,7 +158,7 @@ router.delete('/:thoughtId/reactions', async (req, res) => {
             {
                 $pull: {
                     reactions: {
-                        reactionId: new ObjectId(req.params.reactionId)
+                        reactionId: new ObjectId(req.body)
                     }
                 }
             },
