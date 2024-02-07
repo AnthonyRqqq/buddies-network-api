@@ -17,6 +17,8 @@
 ## Description
     
  This project is an API for the Buddies Network. It allows for creation of new users, for those users to create thoughts and add friends, and for reactions to be posted to thoughts that have been created. It ensures only unique email addresses are used upon user creation and records the dates of all thoughts and reactions created as well as the name of the user that created them.
+
+ [Buddies API Demo](https://drive.google.com/file/d/1LAm35vIzPCoN8PfHdazBsstpirQDBaWx/view)
     
 ## Installation
     
