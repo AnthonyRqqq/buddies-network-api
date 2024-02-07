@@ -149,7 +149,7 @@ router.post('/:thoughtId/reactions', async (req, res) => {
 
 // The /api/thoughts/:thoughtId/reactions/:reactionsId route
 // Used for deleting a reaction by _id on a thought that has been selected by _id
-router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
+router.delete('/:thoughtId/reactions', async (req, res) => {
     try {
         const data = await Thought.findOneAndUpdate(
             {
